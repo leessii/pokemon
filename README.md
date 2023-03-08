@@ -16,6 +16,7 @@ TASKS:
 3. The battle begins:
 - When the encounter begins, pick one of your own pokémon to fight. Since we don't have a Catch function in our code, right now you just need to hard code the chosen pokemons into a list eg.:
 
+
 // starting pokemons
 const usersPokemon = [
     "https://pokeapi.co/api/v2/pokemon/bulbasaur",
