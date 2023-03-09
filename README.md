@@ -52,8 +52,6 @@ The sprite can be scaled up and preserve its pixelated style by using the follow
 https://pokeapi.co/
 https://www.math.miami.edu/~jam/azure/compendium/battdam.htm
 
-test
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
