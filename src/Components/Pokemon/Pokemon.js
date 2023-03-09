@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import sadFace from "../../images/sadface.png";
+import Loader from '../Loading/Loader';
 import PokemonCard from '../PokemonCard/PokemonCard';
 
 // genetare random number for location
@@ -29,6 +30,8 @@ const Pokemon = () => {
 
     // choose random pokemon url
     const [randPokemonUrl, setRandPokemonUrl] = useState({});
+    // status
+    const [status, setStatus] = useState("idle");
     // save pokemonDetails
     // const [pokemonDetails, setPokemonDetails] = useState(null);
 
@@ -38,11 +41,14 @@ const Pokemon = () => {
     // fetch random pokemon
     useEffect(() => {
         const loadPokemonFromArea = async() => {
+            setStatus("loading");
             const pokemon = await fetchPokemonFromArea().catch(err => console.log(err));
             if (pokemon !== undefined) {
                 setRandPokemonUrl(pokemon.url);
+                setStatus("success");
             } else {
                 setRandPokemonUrl(undefined);
+                setStatus("error");
             }
         } 
         loadPokemonFromArea();
@@ -96,20 +102,22 @@ const Pokemon = () => {
     //     }
     //   }, [] );
     
-    // is there a pokemon?
+    // controll the display
     let dispaly;
-    if(randPokemonUrl === undefined) {
+    if(status === "error") {
         dispaly = <PokemonCard 
             title = "OPSSS...." 
             img = { sadFace } 
             details = "This location doesn't seem to have any pokémon!"
         />
-    } else {
-        randPokemonUrl && <PokemonCard 
+    } else if (status === "success") {
+        dispaly = <PokemonCard 
             // title = { randPokemon.name } 
             // img = { pokemonDetails.sprites.front_default } 
             // details = { "HP: " + pokemonDetails.stats[0].base_stat }
         />
+    } else if (status === "loading") {
+        dispaly = <Loader />
     }
 
     return (
