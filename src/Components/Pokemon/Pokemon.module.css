@@ -1,3 +1,11 @@
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 150px;
+    align-items: center;
+}
+
 .button {
     display: flex; 
     justify-content: center;
@@ -11,4 +19,8 @@
     border: 3px solid #295FFF;
     border-radius: 10px;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.096), 0 5px 5px 0 rgba(0, 0, 0, 0.051);
+}
+
+.title {
+    color:black
 }

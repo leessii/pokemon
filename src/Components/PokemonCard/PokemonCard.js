@@ -7,8 +7,8 @@ export default function PokemonCard( { title, img, details } ) {
     <div className={style.content}>
         <div className={`${style.pokemonCard} my-5`}>
             <h1 className={`${style.text} mt-5`}> { title } </h1>
-            <img src={ img } alt="" className={`${style.img} my-5`} />
-            <h4 className={`${style.text} mb-5 mx-3`}> { details } </h4>
+            <img src={ img } alt="" className={`${style.img}`} />
+            <h4 className={`${style.text} mb-5 mx-5`}> { details } </h4>
         </div>
     </div>
   )
