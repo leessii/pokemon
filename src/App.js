@@ -2,7 +2,6 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap"
 import './App.css';
 import React, { useState } from 'react';
-import Footer from "./Components/Footer/Footer";
 import Header from './Components/Header/Header';
 import Locations from "./Components/Locations/Locations";
 import Pokemon from "./Components/Pokemon/Pokemon";
@@ -17,18 +16,22 @@ function App() {
     setLocationVisible(false);
   };
 
+  // click back handler
+  const clickBackHandler = (e) => {
+    setLocationVisible(true); 
+  } 
+
   let display;
   if (locationVisible) {
     display = <Locations clickHandler={clickHandler} />
   } else {
-    display = <Pokemon />
+    display = <Pokemon clickBackHandler={clickBackHandler} />
   }
 
   return (
     <div>
       <Header />
       { display }
-      <Footer />
     </div>
   );
 }

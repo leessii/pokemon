@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import sadFace from "../../images/sadface.png";
 import Loader from '../Loading/Loader';
 import PokemonCard from '../PokemonCard/PokemonCard';
+import style from "./Pokemon.module.css"
 
 // genetare random number for location
 function getRandomLocation(max) {
@@ -17,7 +18,7 @@ function getRandomId(max) {
 const fetchPokemonFromArea = async () => {
     const res = await fetch(`https://pokeapi.co/api/v2/location-area/${getRandomLocation(800)}/`);
     const data = await res.json();
-    const index = getRandomId(15);
+    const index = getRandomId(13);
 
     if (data.pokemon_encounters[index] !== undefined) {
         return data.pokemon_encounters[index].pokemon;
@@ -26,17 +27,17 @@ const fetchPokemonFromArea = async () => {
     }
 };
 
-const Pokemon = () => {
+const Pokemon = ( { clickBackHandler } ) => {
 
     // choose random pokemon url
     const [randPokemonUrl, setRandPokemonUrl] = useState({});
     // status
     const [status, setStatus] = useState("idle");
     // save pokemonDetails
-    // const [pokemonDetails, setPokemonDetails] = useState(null);
+    const [pokemonDetails, setPokemonDetails] = useState(null);
 
     console.log(randPokemonUrl);
-    // console.log(pokemonDetails);
+    console.log(pokemonDetails);
 
     // fetch random pokemon
     useEffect(() => {
@@ -55,66 +56,39 @@ const Pokemon = () => {
     }, [] );
 
     // fetch random pokemon Details
-    // useEffect(() => {
-    //     debugger
-    //     if (randPokemon) {
-    //     fetch(randPokemon.url)
-    //     .then((res) => res.json())
-    //     .then((pokemonDetails) => {
-    //         setPokemonDetails(pokemonDetails)
-    //         console.log(pokemonDetails);
-    //     })
-    //     .catch(err => {
-    //         console.log("no Pokemons");
-    //     })
-    // }
-    // }, [] );
-
-
-        // const getPokemonDetails = async() => {
-        //     if (randPokemon === undefined ) {
-        //         const res = await fetch(randPokemon.url);
-        //         const pokemonDetails = await res.json();
-        //         setPokemonDetails(pokemonDetails);
-        //     }
-        // } 
-        // getPokemonDetails();
-    // }, [randPokemon] );
-
-        // const fetchLocations = async () => {
-        //     const res = await fetch("https://pokeapi.co/api/v2/location");
-        //     const locations = await res.json(); 
-        //     setLocations(locations);
-        //   }
-        //   fetchLocations();
-        // }, []);
-
-    //     if (randPokemon) {
-    //       fetch(randPokemon.url)
-    //         .then((res) => res.json())
-    //         .then((pokemonDetails) => {
-    //           setPokemonDetails(pokemonDetails)
-    //           console.log(pokemonDetails);
-    //         })
-    //         .catch(err => {
-    //           console.log("no Pokemons");
-    //         })
-    //     }
-    //   }, [] );
+    useEffect(() => {
+        if (randPokemonUrl !== undefined) {
+          fetch(`${randPokemonUrl}`)
+            .then((res) => res.json())
+            .then((pokemonDetails) => {
+              setPokemonDetails(pokemonDetails)
+            })
+            .catch(err => {
+                console.log("no Pokemons");
+            })
+        } else {
+            console.log("no Pokemons");
+        }
+    }, [randPokemonUrl] );
     
     // controll the display
     let dispaly;
     if(status === "error") {
-        dispaly = <PokemonCard 
-            title = "OPSSS...." 
-            img = { sadFace } 
-            details = "This location doesn't seem to have any pokémon!"
-        />
+        dispaly = <>
+            <PokemonCard 
+                title = "OPSSS...." 
+                img = { sadFace } 
+                details = "This location doesn't seem to have any pokémon!"
+            />
+            <div className={style.button}>
+                <button className={`${style.butonStyle} mb-5`} onClick={(e) => clickBackHandler(e)}>Go Back</button>
+            </div>
+        </>
     } else if (status === "success") {
-        dispaly = <PokemonCard 
-            // title = { randPokemon.name } 
-            // img = { pokemonDetails.sprites.front_default } 
-            // details = { "HP: " + pokemonDetails.stats[0].base_stat }
+        dispaly = pokemonDetails && <PokemonCard 
+            title = { pokemonDetails.name } 
+            img = { pokemonDetails.sprites.front_default } 
+            details = { "HP: " + pokemonDetails.stats[0].base_stat }
         />
     } else if (status === "loading") {
         dispaly = <Loader />
