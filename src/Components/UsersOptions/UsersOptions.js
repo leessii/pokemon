@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import style from "./UsersOptions.module.css"
 
-const UsersOptions = ( { url } ) => {
+const UsersOptions = ( { url, clickHandler, index } ) => {
 
     // users pokemon
     const [usersPokemon, setUsersPokemon] = useState([])
@@ -14,11 +14,11 @@ const UsersOptions = ( { url } ) => {
         setUsersPokemon(pokemon);
     }
     fetchUsersPokemon();
-    }, []);
+    });
 
   return (
     <div className={style.content}>
-        <button className={`${style.button} my-1`}> {usersPokemon.name} </button>
+        <button id={index} onClick={(e) => clickHandler(e)} className={`${style.button} my-1 px-5`}> {usersPokemon.name} </button>
     </div>
   )
 }

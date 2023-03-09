@@ -4,6 +4,7 @@ import Loader from '../Loading/Loader';
 import PokemonCard from '../PokemonCard/PokemonCard';
 import UsersOptions from '../UsersOptions/UsersOptions';
 import style from "./Pokemon.module.css"
+import pokeBall from "../../images/pokeball.png"
 
 // genetare random number for location
 function getRandomLocation(max) {
@@ -45,6 +46,18 @@ const Pokemon = ( { clickBackHandler } ) => {
     const [pokemonDetails, setPokemonDetails] = useState(null);
     // users pokemons 
     const [usersOptionsVisible, setUsersOptionsVisible] = useState(true);
+    // choosen pokemon Url
+    const [usersCurrPokemonUrl, setUsersCurrPokemonUrl] = useState("");
+    // choosen pokemon
+    const [usersCurrPokemon, setUsersCurrPokemon] = useState({});
+
+    console.log(usersCurrPokemon.name)
+
+    // click handler - choose pokemon
+    const clickHandler = (e) => {
+        setUsersOptionsVisible(false);
+        setUsersCurrPokemonUrl(usersPokemon[e.target.id])
+    }
 
     // fetch random pokemon
     useEffect(() => {
@@ -62,6 +75,16 @@ const Pokemon = ( { clickBackHandler } ) => {
         loadPokemonFromArea();
     }, [] );
 
+    //fetch users Curr pokemons
+    useEffect(() => {
+        const fetchUsersPokemon = async () => {
+            const res = await fetch(usersCurrPokemonUrl);
+            const pokemon = await res.json(); 
+            setUsersCurrPokemon(pokemon);
+        }
+        fetchUsersPokemon();
+    }, [usersOptionsVisible]);
+
     // fetch random pokemon Details
     useEffect(() => {
         if (randPokemonUrl !== undefined) {
@@ -74,18 +97,6 @@ const Pokemon = ( { clickBackHandler } ) => {
         } else {
             console.log("no Pokemons");
         }
-        
-        //   fetch(`${randPokemonUrl}`)
-        //     .then((res) => res.json())
-        //     .then((pokemonDetails) => {
-        //       setPokemonDetails(pokemonDetails)
-        //     })
-        //     .catch(err => {
-        //         console.log("no Pokemons");
-        //     })
-        // } else {
-        //     console.log("no Pokemons");
-        // }
     }, [randPokemonUrl] );
     
     // controll the display
@@ -95,7 +106,7 @@ const Pokemon = ( { clickBackHandler } ) => {
             <PokemonCard 
                 title = "OPSSS...." 
                 img = { sadFace } 
-                details = "This location doesn't seem to have any pokémon!"
+                details = "No pokémon here!"
             />
             <div className={style.button}>
                 <button className={`${style.butonStyle} mb-5`} onClick={(e) => clickBackHandler(e)}>Go Back</button>
@@ -110,17 +121,23 @@ const Pokemon = ( { clickBackHandler } ) => {
                 details = { "HP: " + pokemonDetails.stats[0].base_stat }
             />
             { usersOptionsVisible ? (
-                <div className="content">
+                <div className={style.contentBadge}>
+                    <img src={pokeBall} alt="pokeBall" style={{width: "150px", margin: "30px"}}></img>
                     <h2 className={style.title}>Choose Pokemon:</h2>
                     { usersPokemon && usersPokemon.map((url, index) =>
                         <UsersOptions 
                            url = { url }
                            key = { index }
+                           index = { index }
+                           clickHandler = { clickHandler }
                         />
                     )}
                 </div>
             ) : (
-                <PokemonCard 
+                usersCurrPokemon && <PokemonCard 
+                    title = { usersCurrPokemon.name } 
+                    img = { usersCurrPokemon.sprites.front_default } 
+                    details = { "HP: " + usersCurrPokemon.stats[0].base_stat }
                 />
             )} 
         </div>
