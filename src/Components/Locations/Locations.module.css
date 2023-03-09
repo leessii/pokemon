@@ -17,4 +17,7 @@
 .button {
     flex: 0 50%;
     border-radius: 10px;
+    background-color: #FFCD02;
+    border: 3px solid #295FFF;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.096), 0 5px 5px 0 rgba(0, 0, 0, 0.051);
 }
