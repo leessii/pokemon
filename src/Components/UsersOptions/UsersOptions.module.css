@@ -2,7 +2,7 @@
     background-color: #FFCD02;
     border: 3px solid #295FFF;
     border-radius: 10px;
-    min-width: 100%;
+    width: 300px;
     text-transform: uppercase;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.096), 0 5px 5px 0 rgba(0, 0, 0, 0.051);
 }

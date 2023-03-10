@@ -30,14 +30,7 @@ const fetchPokemonFromArea = async () => {
     }
 };
 
-const Pokemon = ( { clickBackHandler, clickBackToLocationsHandler } ) => {
-
-    // users Pokemons
-    const usersPokemon = [
-        "https://pokeapi.co/api/v2/pokemon/bulbasaur",
-        "https://pokeapi.co/api/v2/pokemon/charizard",
-        "https://pokeapi.co/api/v2/pokemon/poliwhirl"
-    ]
+const Pokemon = ( { clickBackHandler, clickBackToLocationsHandler, usersPokemon, setUsersPokemon } ) => {
 
     // choose random pokemon url
     const [randPokemonUrl, setRandPokemonUrl] = useState({});
@@ -54,7 +47,7 @@ const Pokemon = ( { clickBackHandler, clickBackToLocationsHandler } ) => {
     // attack state
     const [atackState, setAtackState] = useState(false);
 
-    
+    console.log(usersPokemon);
 
     // click handler - choose pokemon
     const clickHandler = (e) => {
@@ -95,7 +88,7 @@ const Pokemon = ( { clickBackHandler, clickBackToLocationsHandler } ) => {
         if (status === "success" && !usersOptionsVisible) {
             const timer = setTimeout(() => {
                 setAtackState(true);
-                console.log("Test");
+                setUsersPokemon([...usersPokemon,`https://pokeapi.co/api/v2/pokemon/${pokemonDetails.name}`]);
             }, 2000); 
             return () => clearTimeout(timer);
         }
@@ -169,7 +162,7 @@ const Pokemon = ( { clickBackHandler, clickBackToLocationsHandler } ) => {
             <img src={attack} alt="attack" className="mt-1"/>
             <h4><span className={`${style.text} text-danger`}>{ usersCurrPokemon.name }</span> won the battle!</h4>
             <div className={style.button}>
-                <button className={`${style.butonStyle} my-5`} onClick={(e) => clickBackToLocationsHandler(e)}>Locations</button>
+                <button className={`${style.butonStyle} my-5`} onClick={(e) => clickBackToLocationsHandler(e)}>Back to Locations</button>
             </div>
         </div>
     } else if (status === "loading") {
@@ -184,68 +177,6 @@ const Pokemon = ( { clickBackHandler, clickBackToLocationsHandler } ) => {
     }
 
 export default Pokemon
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    // // controll the display
-    // let dispaly;
-    // if(status === "error") {
-    //     dispaly = <>
-    //         <PokemonCard 
-    //             title = "OPSSS...." 
-    //             img = { sadFace } 
-    //             details = "No pokémon here!"
-    //         />
-    //         <div className={style.button}>
-    //             <button className={`${style.butonStyle} mb-5`} onClick={(e) => clickBackHandler(e)}>Go Back</button>
-    //         </div>
-    //     </>
-    // } else if (status === "success") {
-    //     dispaly = pokemonDetails && 
-    //     <div className={style.content}> 
-    //         <PokemonCard 
-    //             title = { pokemonDetails.name } 
-    //             img = { pokemonDetails.sprites.front_default } 
-    //             details = { "HP: " + pokemonDetails.stats[0].base_stat }
-    //         />
-    //         { usersOptionsVisible ? (
-    //             <div className={style.contentBadge}>
-    //                 <img src={pokeBall} alt="pokeBall" style={{width: "150px", margin: "30px"}}></img>
-    //                 <h2 className={style.title}>Choose Pokemon:</h2>
-    //                 { usersPokemon && usersPokemon.map((url, index) =>
-    //                     <UsersOptions 
-    //                        url = { url }
-    //                        key = { index }
-    //                        index = { index }
-    //                        clickHandler = { clickHandler }
-    //                     />
-    //                 )}
-    //             </div>
-    //         ) : (
-    //             <PokemonCard 
-    //                 // title = { usersCurrPokemon.name } 
-    //                 // img = { usersCurrPokemon.sprites.front_default } 
-    //                 // details = { "HP: " + usersCurrPokemon.stats[0].base_stat }
-    //             />
-    //         )} 
-    //     </div>
-    // } else if (status === "loading") {
-    //     dispaly = <Loader />
-    // }
 
 
 

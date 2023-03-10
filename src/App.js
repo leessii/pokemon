@@ -10,6 +10,12 @@ function App() {
 
   // toggle Locations/Pokemon
   const [locationVisible, setLocationVisible] = useState(true);
+  // users Pokemons 
+  const [usersPokemon, setUsersPokemon] = useState([
+    "https://pokeapi.co/api/v2/pokemon/bulbasaur",
+    "https://pokeapi.co/api/v2/pokemon/charizard",
+    "https://pokeapi.co/api/v2/pokemon/poliwhirl"
+  ]);
 
   // click handler
   const clickHandler = () => {
@@ -36,9 +42,10 @@ function App() {
     display = 
     <Pokemon 
       clickBackHandler={clickBackHandler} 
-      clickBackToLocationsHandler={clickBackToLocationsHandler} />
+      clickBackToLocationsHandler={clickBackToLocationsHandler}
+      usersPokemon={usersPokemon}
+      setUsersPokemon={setUsersPokemon} />
   }
-
 
   return (
     <div>
