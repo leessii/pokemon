@@ -5,6 +5,7 @@ import PokemonCard from '../PokemonCard/PokemonCard';
 import UsersOptions from '../UsersOptions/UsersOptions';
 import style from "./Pokemon.module.css"
 import pokeBall from "../../images/pokeball.png"
+import attack from "../../images/baam.png"
 
 // genetare random number for location
 function getRandomLocation(max) {
@@ -50,8 +51,10 @@ const Pokemon = ( { clickBackHandler } ) => {
     const [usersCurrPokemonUrl, setUsersCurrPokemonUrl] = useState("");
     // choosen pokemon
     const [usersCurrPokemon, setUsersCurrPokemon] = useState({});
+    // attack state
+    const [atackState, setAtackState] = useState(false);
 
-    console.log(usersCurrPokemon)
+    
 
     // click handler - choose pokemon
     const clickHandler = (e) => {
@@ -86,6 +89,17 @@ const Pokemon = ( { clickBackHandler } ) => {
         }
         fetchUsersPokemon();
     }, [usersOptionsVisible]);
+
+    // set Timeout 
+    useEffect(() => {
+        if (status === "success" && !usersOptionsVisible) {
+            const timer = setTimeout(() => {
+                setAtackState(true);
+                console.log("Test");
+            }, 2000); 
+            return () => clearTimeout(timer);
+        }
+      }, [usersCurrPokemon]);
 
     // fetch random pokemon Details
     useEffect(() => {
@@ -135,7 +149,7 @@ const Pokemon = ( { clickBackHandler } ) => {
                     )}
             </div>
         </div>
-    } else if (status === "success" && !usersOptionsVisible) {
+    } else if (status === "success" && !usersOptionsVisible && atackState === false) {
         dispaly = 
         <div className={style.content}> 
             <PokemonCard 
@@ -148,8 +162,12 @@ const Pokemon = ( { clickBackHandler } ) => {
                 img = { usersCurrPokemon.sprites.front_default } 
                 details = { "HP: " + usersCurrPokemon.stats[0].base_stat }
             />
-    </div>
-
+        </div>;
+    } else if (atackState === true) {
+        dispaly = 
+        <div className={`${style.content} my-5`}>
+            <img src={attack} alt="attack" className="my-5"/>
+        </div>
     } else if (status === "loading") {
         dispaly = <Loader />
     }
