@@ -51,18 +51,18 @@ const Pokemon = ( { clickBackHandler } ) => {
     // choosen pokemon
     const [usersCurrPokemon, setUsersCurrPokemon] = useState({});
 
-    console.log(usersCurrPokemon.name)
+    console.log(usersCurrPokemon)
 
     // click handler - choose pokemon
     const clickHandler = (e) => {
         setUsersOptionsVisible(false);
-        setUsersCurrPokemonUrl(usersPokemon[e.target.id])
+        setUsersCurrPokemonUrl(usersPokemon[e.target.id]);
+        setStatus("loading");
     }
 
     // fetch random pokemon
     useEffect(() => {
         const loadPokemonFromArea = async() => {
-            setStatus("loading");
             const pokemon = await fetchPokemonFromArea().catch(err => console.log(err));
             if (pokemon !== undefined) {
                 setRandPokemonUrl(pokemon.url);
@@ -77,10 +77,12 @@ const Pokemon = ( { clickBackHandler } ) => {
 
     //fetch users Curr pokemons
     useEffect(() => {
+        setStatus("loading");
         const fetchUsersPokemon = async () => {
             const res = await fetch(usersCurrPokemonUrl);
             const pokemon = await res.json(); 
             setUsersCurrPokemon(pokemon);
+            setStatus("success");
         }
         fetchUsersPokemon();
     }, [usersOptionsVisible]);
@@ -98,7 +100,7 @@ const Pokemon = ( { clickBackHandler } ) => {
             console.log("no Pokemons");
         }
     }, [randPokemonUrl] );
-    
+
     // controll the display
     let dispaly;
     if(status === "error") {
@@ -112,7 +114,7 @@ const Pokemon = ( { clickBackHandler } ) => {
                 <button className={`${style.butonStyle} mb-5`} onClick={(e) => clickBackHandler(e)}>Go Back</button>
             </div>
         </>
-    } else if (status === "success") {
+    } else if (status === "success" && usersOptionsVisible) {
         dispaly = pokemonDetails && 
         <div className={style.content}> 
             <PokemonCard 
@@ -120,27 +122,34 @@ const Pokemon = ( { clickBackHandler } ) => {
                 img = { pokemonDetails.sprites.front_default } 
                 details = { "HP: " + pokemonDetails.stats[0].base_stat }
             />
-            { usersOptionsVisible ? (
-                <div className={style.contentBadge}>
+            <div className={style.contentBadge}>
                     <img src={pokeBall} alt="pokeBall" style={{width: "150px", margin: "30px"}}></img>
                     <h2 className={style.title}>Choose Pokemon:</h2>
                     { usersPokemon && usersPokemon.map((url, index) =>
                         <UsersOptions 
-                           url = { url }
-                           key = { index }
-                           index = { index }
-                           clickHandler = { clickHandler }
+                        url = { url }
+                        key = { index }
+                        index = { index }
+                        clickHandler = { clickHandler }
                         />
                     )}
-                </div>
-            ) : (
-                usersCurrPokemon && <PokemonCard 
-                    title = { usersCurrPokemon.name } 
-                    img = { usersCurrPokemon.sprites.front_default } 
-                    details = { "HP: " + usersCurrPokemon.stats[0].base_stat }
-                />
-            )} 
+            </div>
         </div>
+    } else if (status === "success" && !usersOptionsVisible) {
+        dispaly = 
+        <div className={style.content}> 
+            <PokemonCard 
+                title = { pokemonDetails.name } 
+                img = { pokemonDetails.sprites.front_default } 
+                details = { "HP: " + pokemonDetails.stats[0].base_stat }
+            />
+            <PokemonCard 
+                title = { usersCurrPokemon.name } 
+                img = { usersCurrPokemon.sprites.front_default } 
+                details = { "HP: " + usersCurrPokemon.stats[0].base_stat }
+            />
+    </div>
+
     } else if (status === "loading") {
         dispaly = <Loader />
     }
@@ -153,3 +162,80 @@ const Pokemon = ( { clickBackHandler } ) => {
     }
 
 export default Pokemon
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    // // controll the display
+    // let dispaly;
+    // if(status === "error") {
+    //     dispaly = <>
+    //         <PokemonCard 
+    //             title = "OPSSS...." 
+    //             img = { sadFace } 
+    //             details = "No pokémon here!"
+    //         />
+    //         <div className={style.button}>
+    //             <button className={`${style.butonStyle} mb-5`} onClick={(e) => clickBackHandler(e)}>Go Back</button>
+    //         </div>
+    //     </>
+    // } else if (status === "success") {
+    //     dispaly = pokemonDetails && 
+    //     <div className={style.content}> 
+    //         <PokemonCard 
+    //             title = { pokemonDetails.name } 
+    //             img = { pokemonDetails.sprites.front_default } 
+    //             details = { "HP: " + pokemonDetails.stats[0].base_stat }
+    //         />
+    //         { usersOptionsVisible ? (
+    //             <div className={style.contentBadge}>
+    //                 <img src={pokeBall} alt="pokeBall" style={{width: "150px", margin: "30px"}}></img>
+    //                 <h2 className={style.title}>Choose Pokemon:</h2>
+    //                 { usersPokemon && usersPokemon.map((url, index) =>
+    //                     <UsersOptions 
+    //                        url = { url }
+    //                        key = { index }
+    //                        index = { index }
+    //                        clickHandler = { clickHandler }
+    //                     />
+    //                 )}
+    //             </div>
+    //         ) : (
+    //             <PokemonCard 
+    //                 // title = { usersCurrPokemon.name } 
+    //                 // img = { usersCurrPokemon.sprites.front_default } 
+    //                 // details = { "HP: " + usersCurrPokemon.stats[0].base_stat }
+    //             />
+    //         )} 
+    //     </div>
+    // } else if (status === "loading") {
+    //     dispaly = <Loader />
+    // }
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
