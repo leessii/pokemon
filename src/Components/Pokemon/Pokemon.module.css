@@ -1,7 +1,13 @@
 .attack{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-weight: bolder;
+}
+
+.text {
+    text-transform: uppercase;
 }
 
 .content {

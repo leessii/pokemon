@@ -21,7 +21,7 @@ function getRandomId(max) {
 const fetchPokemonFromArea = async () => {
     const res = await fetch(`https://pokeapi.co/api/v2/location-area/${getRandomLocation(800)}/`);
     const data = await res.json();
-    const index = getRandomId(13);
+    const index = getRandomId(10);
 
     if (data.pokemon_encounters[index] !== undefined) {
         return data.pokemon_encounters[index].pokemon;
@@ -30,7 +30,7 @@ const fetchPokemonFromArea = async () => {
     }
 };
 
-const Pokemon = ( { clickBackHandler } ) => {
+const Pokemon = ( { clickBackHandler, clickBackToLocationsHandler } ) => {
 
     // users Pokemons
     const usersPokemon = [
@@ -90,7 +90,7 @@ const Pokemon = ( { clickBackHandler } ) => {
         fetchUsersPokemon();
     }, [usersOptionsVisible]);
 
-    // set Timeout 
+    // set Timeout for Attack
     useEffect(() => {
         if (status === "success" && !usersOptionsVisible) {
             const timer = setTimeout(() => {
@@ -165,8 +165,12 @@ const Pokemon = ( { clickBackHandler } ) => {
         </div>;
     } else if (atackState === true) {
         dispaly = 
-        <div className={`${style.content} my-5`}>
-            <img src={attack} alt="attack" className="my-5"/>
+        <div className={`${style.attack} my-2`}>
+            <img src={attack} alt="attack" className="mt-1"/>
+            <h4><span className={`${style.text} text-danger`}>{ usersCurrPokemon.name }</span> won the battle!</h4>
+            <div className={style.button}>
+                <button className={`${style.butonStyle} my-5`} onClick={(e) => clickBackToLocationsHandler(e)}>Locations</button>
+            </div>
         </div>
     } else if (status === "loading") {
         dispaly = <Loader />

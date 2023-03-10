@@ -17,16 +17,28 @@ function App() {
   };
 
   // click back handler
-  const clickBackHandler = (e) => {
+  const clickBackHandler = () => {
     setLocationVisible(true); 
   } 
 
+  // go backt to start 
+  const clickBackToLocationsHandler = () => {
+    setLocationVisible(true);
+  };
+
+  // controll display
   let display;
   if (locationVisible) {
-    display = <Locations clickHandler={clickHandler} />
+    display = 
+    <Locations 
+      clickHandler={clickHandler} />
   } else {
-    display = <Pokemon clickBackHandler={clickBackHandler} />
+    display = 
+    <Pokemon 
+      clickBackHandler={clickBackHandler} 
+      clickBackToLocationsHandler={clickBackToLocationsHandler} />
   }
+
 
   return (
     <div>
